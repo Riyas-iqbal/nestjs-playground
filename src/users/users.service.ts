@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -36,7 +38,7 @@ export class UsersService {
             role: 'INTERN'
         }
     ]
-    
+
     findAll(role?: 'INTERN' | 'ENGINEER' | 'ADMIN') {
         if (role) {
             return this.users.filter(user => user.role === role)
@@ -50,10 +52,10 @@ export class UsersService {
             return user
         }
 
-        return 'User doesnt exist with id:' + id
+        // return 'User doesnt exist with id:' + id
     }
 
-    create(user: { name: string, email: string, role: 'INTERN' | 'ENGINEER' | 'ADMIN', age: number }) {
+    create(user: CreateUserDto) {
         const userByHighestId = [...this.users].sort((a, b) => b.id - a.id)
         const highestId = userByHighestId[0].id
         const newUser = {
@@ -64,7 +66,7 @@ export class UsersService {
         return newUser
     }
 
-    update(id: number, updateUser: { name?: string, email?: string, role?: 'INTERN' | 'ENGINEER' | 'ADMIN', age?: number }) {
+    update(id: number, updateUser: UpdateUserDto) {
         this.users = this.users.map(user => {
             if (user.id === id) {
                 return { ...user, ...updateUser }
@@ -78,5 +80,6 @@ export class UsersService {
     delete(id: number) {
         const removeUser = this.findOne(id)
         this.users = this.users.filter(user => user.id !== id)
+        return { ...removeUser, message: 'userr removed successfully' }
     }
 } 
