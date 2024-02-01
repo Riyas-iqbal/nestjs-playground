@@ -14,7 +14,7 @@ datasource db {
 model Employee {
   id        Int      @id @default(autoincrement())
   name      String   
-  emaill    String   @unique
+  email    String   @unique
   role      Role
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -25,3 +25,7 @@ enum Role {
   ENGINEER
   ADMIN
 }
+
+
+// to update the schema with neon
+// npx prisma generate dev --name name_for_commit
