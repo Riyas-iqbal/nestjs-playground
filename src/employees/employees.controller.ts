@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { Prisma } from '@prisma/client';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
+@SkipThrottle() //skip throttle for whole controller
 @Controller('employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
@@ -11,11 +13,13 @@ export class EmployeesController {
     return this.employeesService.create(createEmployeeDto);
   }
 
+  @SkipThrottle({default: false}) //Skip throttle for this specific api
   @Get()
   findAll(@Query('role') role?: "INTERN" | "ENGINEER" | "ADMIN" ) {
     return this.employeesService.findAll(role);
   }
 
+  @Throttle({short: {ttl: 1000, limit: 1}}) // custom throttle for this api, this will override the short defined in app.module
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.employeesService.findOne(+id);
