@@ -6,6 +6,7 @@ import { DatabaseModule } from './database/database.module';
 import { EmployeesModule } from './employees/employees.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { LoggerModule } from './logger/logger.module';
 
 const THROTTLE_OPTIONS = [{
   name: "short",
@@ -22,7 +23,8 @@ const THROTTLE_OPTIONS = [{
     UsersModule, 
     DatabaseModule, 
     EmployeesModule,
-    ThrottlerModule.forRoot(THROTTLE_OPTIONS)
+    ThrottlerModule.forRoot(THROTTLE_OPTIONS),
+    LoggerModule
   ],
   controllers: [AppController],
   providers: [AppService, {
